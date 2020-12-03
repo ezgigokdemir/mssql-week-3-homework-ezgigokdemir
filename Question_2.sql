@@ -12,3 +12,12 @@ FROM (select distinct u.urunKod, u.urunAd, k.* from tblSiparisDetay d
 		join tblKullanici k on k.kullaniciKod = s.kullaniciKod) as T2
 			GROUP BY T2.kullaniciKod , T2.isim, T2.soyad
 			ORDER BY T2.kullaniciKod;
+
+
+
+--2. Yontem
+select distinct u.urunKod, u.urunAd, k.* from tblSiparis s 
+	join tblSiparisDetay d on s.faturaKod = d.faturaKod
+	join tblUrun u on u.urunKod = d.urunKod
+	join tblKullanici k on s.kullaniciKod = k.kullaniciKod
+	where s.toplam = (select max(toplam) from tblSiparis)
