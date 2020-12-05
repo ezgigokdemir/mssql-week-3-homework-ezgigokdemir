@@ -10,6 +10,20 @@ select T1.sehir, sh.Isim, T1.Total from tblSehir sh join
 
 
 --2. Yontem
+select T1.sehir, sh.Isim, T1.Total  from
+	(select k.sehir, count(k.sehir) Total, 
+		ROW_NUMBER() over(order by count(k.sehir) desc) as rn
+	from tblSiparis s
+		join tblSiparisDetay d on d.faturaKod = s.faturaKod
+		join tblKullanici k on s.kullaniciKod = k.kullaniciKod
+		where d.urunKod = 3265
+		group by k.sehir
+		) T1 
+	join tblSehir sh on sh.Id = T1.sehir
+	where T1.rn = 1
+
+
+--3. Yontem
 select T3.sehir, sh.Isim, T3.Total from tblSehir sh 
     join (select T1.sehir, T1.Total from 
 			(select k.sehir, count(k.sehir) Total from tblSiparis s
